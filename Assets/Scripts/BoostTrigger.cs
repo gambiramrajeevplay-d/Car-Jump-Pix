@@ -25,13 +25,13 @@ public class BoostTrigger : MonoBehaviour
 
     void Update()
     {
-        // MANUAL JUMP
-        if ((Input.GetKeyDown(KeyCode.Space) ||
-            Input.GetKeyDown(KeyCode.Joystick1Button0))
-            && IsGrounded())
-        {
-            Jump(transform.forward);
-        }
+        //MANUAL JUMP
+        //if ((Input.GetKeyDown(KeyCode.Space) ||
+        //    Input.GetKeyDown(KeyCode.Joystick1Button0))
+        //    && IsGrounded())
+        //{
+        //    Jump(transform.forward);
+        //}
 
         AirControl();
     }
@@ -65,17 +65,16 @@ public class BoostTrigger : MonoBehaviour
         }
     }
 
-    public void Jump(Vector3 jumpDirection)
+    public void Jump(Vector3 jumpDirection, float customJumpHeight)
     {
         if (rb == null)
             return;
 
         Vector3 velocity = rb.velocity;
 
-        // RESET ROTATION SHAKE
         rb.angularVelocity = Vector3.zero;
 
-        // PLAY SOUND
+        // SOUND
         if (boostCollectedSound)
         {
             GameObject audioObj =
@@ -97,23 +96,21 @@ public class BoostTrigger : MonoBehaviour
             );
         }
 
-        // REMOVE FALLING SPEED
+        // REMOVE FALL SPEED
         if (velocity.y < 0f)
             velocity.y = 0f;
 
-        // APPLY JUMP HEIGHT
-        velocity.y = jumpHeight;
+        // USE CUSTOM HEIGHT
+        velocity.y = customJumpHeight;
 
-        // NORMALIZE DIRECTION
+        // DIRECTION
         jumpDirection.y = 0f;
         jumpDirection.Normalize();
 
-        // APPLY FORWARD FORCE
         velocity +=
             jumpDirection *
             forwardForceMultiplier;
 
-        // FINAL VELOCITY
         rb.velocity = velocity;
     }
 }

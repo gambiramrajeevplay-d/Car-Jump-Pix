@@ -8,8 +8,10 @@ public class JumpTrigger : MonoBehaviour
         Left,
         Right
     }
-
+    
     public JumpDirection jumpDirection;
+
+    public float jumpheight = 10f;
 
     public float jumpAngle = 35f;
 
@@ -42,7 +44,6 @@ public class JumpTrigger : MonoBehaviour
                 0f
             ) * other.transform.forward;
         }
-
-        boost.Jump(dir.normalized);
+        boost.Jump(dir.normalized, jumpheight);
     }
 }
