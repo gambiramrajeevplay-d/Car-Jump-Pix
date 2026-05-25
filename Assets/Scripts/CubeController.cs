@@ -50,8 +50,8 @@ public class CubeController : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation.Interpolate;
 
         rb.constraints =
-            RigidbodyConstraints.FreezeRotationX |
-            RigidbodyConstraints.FreezeRotationZ;
+      RigidbodyConstraints.FreezeRotationX |
+      RigidbodyConstraints.FreezeRotationZ;
 
         rb.angularDrag = 5f;
 
@@ -96,20 +96,32 @@ public class CubeController : MonoBehaviour
             reverseSpeed :
             moveSpeed;
 
-        // TARGET FORWARD VELOCITY
-        Vector3 targetVelocity =
+        // FORWARD FORCE
+        Vector3 forwardForce =
             transform.forward *
             moveInput *
             currentSpeed;
 
-        // KEEP GRAVITY
-        targetVelocity.y = rb.velocity.y;
+        // PRESERVE CURRENT Y VELOCITY
+        Vector3 velocity = rb.velocity;
 
-        // EXTRA SMOOTH AUTO MOVEMENT
-        rb.velocity = Vector3.Lerp(
-            rb.velocity,
-            targetVelocity,
-            acceleration * 0.5f * Time.fixedDeltaTime
+        // APPLY SMOOTH FORWARD MOVEMENT
+        velocity.x = Mathf.Lerp(
+            velocity.x,
+            forwardForce.x,
+            acceleration * Time.fixedDeltaTime
+        );
+
+        velocity.z = Mathf.Lerp(
+            velocity.z,
+            forwardForce.z,
+            acceleration * Time.fixedDeltaTime
+        );
+
+        rb.velocity = new Vector3(
+            velocity.x,
+            rb.velocity.y,
+            velocity.z
         );
     }
 

@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: fb3d5fbbec94bd1489578e5ab0944712
+guid: a2597af5f506b204ea80dfe9cc9da139
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Low-Poly-Obs-N1x
+    second: {fileID: 2100000, guid: b4f43f71036bc3c41b3b12bf0996c4a7, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: f173411359934c139b035a158812a6a3_RGB_ColorP
+    second: {fileID: 2800000, guid: b4dc194dea2e36f4c89247cc7cad615b, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
