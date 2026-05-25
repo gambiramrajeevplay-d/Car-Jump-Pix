@@ -1,9 +1,29 @@
 fileFormatVersion: 2
-guid: fb3d5fbbec94bd1489578e5ab0944712
+guid: d3780ad9ad38c1c49a0150575e59e89a
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Obstacles_-_1_Material
+    second: {fileID: 2100000, guid: b6857d1d3d712f941a2c98f1300c1cc4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Obstacles_-_2_Material
+    second: {fileID: 2100000, guid: 3ae5363ff7a3e1343b3089453ede9800, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Obstacles_-_3_Material
+    second: {fileID: 2100000, guid: 5ec9e58c57867754381bef6b8e9d64bb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Obstacles_-_4_Material
+    second: {fileID: 2100000, guid: 6218d1feb954c0945a003b4ee59cf034, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

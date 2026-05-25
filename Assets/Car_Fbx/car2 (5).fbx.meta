@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: fb3d5fbbec94bd1489578e5ab0944712
+guid: c1a73aa157955de4a95ecf40f2ea1dc9
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: car_l33t_v5_2
+    second: {fileID: 2100000, guid: 04620835ebb8ff240b8f95473723f916, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: cd4b3c92004440678036e5b528d17b79_RGB_carro_l33t_v5_2_albedo
+    second: {fileID: 2800000, guid: 9f3d1ecf18f2fc64d87965f7dc803a99, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

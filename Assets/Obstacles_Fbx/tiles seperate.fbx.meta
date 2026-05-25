@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: fb3d5fbbec94bd1489578e5ab0944712
+guid: 3c1d6d4974bac7a42b747861880ad342
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CheckerBox
+    second: {fileID: 2100000, guid: 7f7b293a9add2e042a835b6b82cbca6e, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: yellow-black-square-checkered-check-flag-pattern-grid-texture-checkerboard-vector
+    second: {fileID: 2800000, guid: d28135fbbf871aa4f8a79676bc47feb0, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

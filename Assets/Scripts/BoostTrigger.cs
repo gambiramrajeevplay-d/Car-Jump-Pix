@@ -18,102 +18,91 @@ public class BoostTrigger : MonoBehaviour
     [Header("Audio")]
     public AudioClip boostCollectedSound;
 
+    private bool isGrounded;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-    }
 
-    void Update()
-    {
-        // MANUAL JUMP
-        if ((Input.GetKeyDown(KeyCode.Space) ||
-            Input.GetKeyDown(KeyCode.Joystick1Button0))
-            && IsGrounded())
+        if (rb == null)
         {
-            Jump(transform.forward);
+            Debug.LogError("Rigidbody Missing!");
+            return;
         }
 
-        AirControl();
+        rb.maxAngularVelocity = 2f;
     }
 
-    bool IsGrounded()
+
+    void FixedUpdate()
     {
-        return Physics.Raycast(
+        isGrounded = Physics.Raycast(
             transform.position,
             Vector3.down,
             groundDistance,
             groundLayer
         );
-    }
 
-    void AirControl()
-    {
-        if (!IsGrounded())
+        if (!isGrounded)
         {
-            Vector3 vel = rb.velocity;
-
-            // EXTRA GRAVITY
-            vel.y -= extraGravity * Time.deltaTime;
-
-            rb.velocity = vel;
-
-            // REMOVE AIR SHAKE
-            Vector3 angVel = rb.angularVelocity;
-            angVel.x = 0f;
-            angVel.z = 0f;
-            rb.angularVelocity = angVel;
+            rb.AddForce(
+                Vector3.down * extraGravity,
+                ForceMode.Acceleration
+            );
         }
     }
 
-    public void Jump(Vector3 jumpDirection)
+
+
+    //void AirControl()
+    //{
+    //    if (!IsGrounded())
+    //    {
+    //        Vector3 vel = rb.velocity;
+
+    //        // EXTRA GRAVITY
+    //        vel.y -= extraGravity * Time.deltaTime;
+
+    //        rb.velocity = vel;
+
+    //        // REMOVE AIR SHAKE
+    //        Vector3 angVel = rb.angularVelocity;
+    //        angVel.x = 0f;
+    //        angVel.z = 0f;
+    //        rb.angularVelocity = angVel;
+    //    }
+    //}
+
+    public void Jump(Vector3 jumpDirection, float customJumpHeight)
     {
         if (rb == null)
             return;
 
         Vector3 velocity = rb.velocity;
 
-        // RESET ROTATION SHAKE
-        rb.angularVelocity = Vector3.zero;
-
         // PLAY SOUND
         if (boostCollectedSound)
         {
-            GameObject audioObj =
-                new GameObject("JumpSound");
-
-            audioObj.transform.position =
-                transform.position;
-
-            AudioSource source =
-                audioObj.AddComponent<AudioSource>();
-
-            source.clip = boostCollectedSound;
-            source.spatialBlend = 1f;
-            source.Play();
-
-            Destroy(
-                audioObj,
-                boostCollectedSound.length
+            AudioSource.PlayClipAtPoint(
+                boostCollectedSound,
+                transform.position
             );
         }
 
-        // REMOVE FALLING SPEED
+        // RESET FALL SPEED
         if (velocity.y < 0f)
             velocity.y = 0f;
 
-        // APPLY JUMP HEIGHT
-        velocity.y = jumpHeight;
+        // JUMP HEIGHT
+        velocity.y = customJumpHeight;
 
-        // NORMALIZE DIRECTION
+        // FORWARD BOOST
         jumpDirection.y = 0f;
-        jumpDirection.Normalize();
+        jumpDirection = jumpDirection.normalized;
 
-        // APPLY FORWARD FORCE
         velocity +=
             jumpDirection *
             forwardForceMultiplier;
 
-        // FINAL VELOCITY
         rb.velocity = velocity;
     }
 }
