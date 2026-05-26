@@ -988,7 +988,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a91ff3387586bd34cb62ca83bdbddfe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  failPanel: {fileID: 272114239}
+  homeSceneName: Home
+  startPauseDuration: 3
+  countdownTexts: []
+  levelGameObject: {fileID: 0}
+  levelPassPanel: {fileID: 0}
+  levelFailPanel: {fileID: 0}
+  levelPassClip: {fileID: 0}
+  levelFailClip: {fileID: 0}
 --- !u!4 &344158758
 Transform:
   m_ObjectHideFlags: 0
@@ -5346,7 +5353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66d89261661a58e49a0b474a914859ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  failDelay: 1
 --- !u!65 &1273105785
 BoxCollider:
   m_ObjectHideFlags: 0
