@@ -1,24 +1,24 @@
 using UnityEngine;
 
-public class LevelFailTrigger : MonoBehaviour
+public class FinishTrigger : MonoBehaviour
 {
-    private bool failed;
+    private bool finished = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        // PREVENT MULTIPLE FAILS
-        if (failed)
+        // PREVENT MULTIPLE TRIGGERS
+        if (finished)
             return;
 
         // CHECK PLAYER
         if (other.CompareTag("Player"))
         {
-            failed = true;
+            finished = true;
 
-            // CALL GAMEMANAGER
+            // SHOW LEVEL PASS
             if (GameManager.Instance != null)
             {
-                GameManager.Instance.LevelFailed();
+                GameManager.Instance.LevelPassed();
             }
         }
     }
