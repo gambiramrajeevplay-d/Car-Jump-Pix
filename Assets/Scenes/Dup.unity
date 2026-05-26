@@ -2015,7 +2015,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 889932910}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2988,6 +2988,8 @@ MonoBehaviour:
   levelGameObject: {fileID: 0}
   levelPassPanel: {fileID: 0}
   levelFailPanel: {fileID: 0}
+  levelPassClip: {fileID: 0}
+  levelFailClip: {fileID: 0}
 --- !u!1 &1669855668
 GameObject:
   m_ObjectHideFlags: 0
