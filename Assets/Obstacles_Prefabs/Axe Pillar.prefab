@@ -128,6 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pushForce: 150
   upwardForce: 4
+  pushClip: {fileID: 8300000, guid: 4bfbf64076bba6d49b685d0b3850679e, type: 3}
+  volume: 1
 --- !u!1 &2003349530554179926
 GameObject:
   m_ObjectHideFlags: 0

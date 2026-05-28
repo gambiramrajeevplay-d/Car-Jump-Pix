@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +9,10 @@ public class TileFallManager : MonoBehaviour
 
     [Header("Settings")]
     public float delayBetweenTiles = 0.5f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip breakClip;
+    [SerializeField] private float volume = 1f;
 
     private bool started = false;
 
@@ -26,7 +30,26 @@ public class TileFallManager : MonoBehaviour
     {
         foreach (FallingTile tile in tiles)
         {
+            // Break tile
             tile.Fall();
+
+            // 🔊 Play break sound
+            if (breakClip != null)
+            {
+                GameObject audioObj = new GameObject("TileBreakSound");
+
+                AudioSource source = audioObj.AddComponent<AudioSource>();
+
+                source.clip = breakClip;
+                source.volume = volume;
+
+                // IMPORTANT
+                source.spatialBlend = 0f; // 2D sound
+
+                source.Play();
+
+                Destroy(audioObj, breakClip.length);
+            }
 
             yield return new WaitForSeconds(delayBetweenTiles);
         }

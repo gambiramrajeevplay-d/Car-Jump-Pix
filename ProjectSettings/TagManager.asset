@@ -8,6 +8,8 @@ TagManager:
   - Jump
   - Level
   - Pass
+  - Giveborder
+  - border
   layers:
   - Default
   - TransparentFX

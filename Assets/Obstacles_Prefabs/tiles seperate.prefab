@@ -220,6 +220,8 @@ MonoBehaviour:
   - {fileID: 2679533040460887546}
   - {fileID: 2760581096087136346}
   delayBetweenTiles: 0.05
+  breakClip: {fileID: 8300000, guid: ef559d841b9ccd948a09f232766954ad, type: 3}
+  volume: 1
 --- !u!1 &1593809169253609049
 GameObject:
   m_ObjectHideFlags: 0

@@ -14769,6 +14769,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinValue: 1
   pickupEffect: {fileID: 4310913203290180227}
+  pickupClip: {fileID: 8300000, guid: 393aeaee9bb4d064aa3efc4a50355187, type: 3}
+  volume: 1
 --- !u!1 &5394866817562423462
 GameObject:
   m_ObjectHideFlags: 0

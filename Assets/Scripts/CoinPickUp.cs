@@ -2,42 +2,51 @@
 
 public class CoinPickUp : MonoBehaviour
 {
+    [Header("Coin Settings")]
     [SerializeField] private int coinValue = 1;
+
+    [Header("Effects")]
     [SerializeField] private ParticleSystem pickupEffect;
 
-    private AudioSource pickupSound;
-
-    private void Awake()
-    {
-        // 🔊 Find AudioSource with tag "PickUp"
-        GameObject audioObj = GameObject.FindGameObjectWithTag("PickUp");
-
-        if (audioObj != null)
-        {
-            pickupSound = audioObj.GetComponent<AudioSource>();
-        }
-        else
-        {
-            Debug.LogWarning("[CoinPickUp] No GameObject found with tag 'PickUp'");
-        }
-    }
+    [Header("Audio")]
+    [SerializeField] private AudioClip pickupClip;
+    [SerializeField] private float volume = 1f;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Player"))
+            return;
 
+        // 🔊 Create temporary AudioSource and play clip
+        if (pickupClip != null)
+        {
+            GameObject audioObj = new GameObject("CoinPickupSound");
 
-        // 🔊 Play pickup sound
-        if (pickupSound != null)
-            pickupSound.Play();
+            // Spawn at coin position
+            audioObj.transform.position = transform.position;
+
+            AudioSource source = audioObj.AddComponent<AudioSource>();
+            source.clip = pickupClip;
+            source.volume = volume;
+            source.spatialBlend = 0f; // 0 = 2D sound, 1 = 3D sound
+
+            source.Play();
+
+            // Destroy after clip finishes
+            Destroy(audioObj, pickupClip.length);
+        }
 
         // ✨ Play pickup particle
-        if (pickupEffect)
+        if (pickupEffect != null)
         {
             pickupEffect.transform.SetParent(null);
             pickupEffect.Play();
+
             Destroy(pickupEffect.gameObject, 2f);
         }
+
+        // 💰 Add coins here if needed
+        // CoinManager.Instance.AddCoins(coinValue);
 
         Destroy(gameObject);
     }
