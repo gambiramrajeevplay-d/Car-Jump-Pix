@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0.6564169, g: 0.9339623, b: 0.9339623, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
@@ -96,7 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 3310d2b3461a2ba4097816d0e51da55a, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -774,6 +774,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1025782800}
     m_Modifications:
+    - target: {fileID: 1423755657781890248, guid: ed9129a5479211e4eb782c2d24de44ea, type: 3}
+      propertyPath: delayBetweenTiles
+      value: 0.07
+      objectReference: {fileID: 0}
     - target: {fileID: 1423755657781890251, guid: ed9129a5479211e4eb782c2d24de44ea, type: 3}
       propertyPath: m_Name
       value: tiles seperate

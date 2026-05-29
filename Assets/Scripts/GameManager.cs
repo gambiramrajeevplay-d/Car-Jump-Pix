@@ -24,9 +24,9 @@ public class GameManager : MonoBehaviour
     public GameObject levelFailPanel;
 
     [Header("Coin UI")]
-    [SerializeField] private TMP_Text coinText;           // HUD coin text (during gameplay)
-    [SerializeField] private TMP_Text passPanelCoinText;  // Coin text on Pass panel
-    [SerializeField] private TMP_Text failPanelCoinText;  // Coin text on Fail panel
+    [SerializeField] private TMP_Text coinText;
+    [SerializeField] private TMP_Text passPanelCoinText;
+    [SerializeField] private TMP_Text failPanelCoinText;
 
     [Header("Win Bonus")]
     [SerializeField] private int winBonusCoins = 100;
@@ -41,8 +41,8 @@ public class GameManager : MonoBehaviour
     public AudioClip levelFailClip;
 
     private bool gameStarted = false;
-    private int sessionCoins = 0;  // Coins collected this level
-
+    private int sessionCoins = 0;
+    [SerializeField] private TMP_Text tutorialCoinText;
     private void Awake()
     {
         // SINGLETON
@@ -53,102 +53,53 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+        // RESET SESSION COINS
+        sessionCoins = 0;
+    }
 
-        levelGameObject = FindObjectByTagIncludingInactive("Level");
-        levelPassPanel = FindObjectByTagIncludingInactive("Pass");
-        levelFailPanel = FindObjectByTagIncludingInactive("Fail");
-
-        // AUTO-FIND COUNTDOWN TEXTS BY TAG
-        countdownTexts = new List<TMP_Text>
+    private void Start()
     {
-        FindTextByTag("3"),
-        FindTextByTag("2"),
-        FindTextByTag("1"),
-        FindTextByTag("GO")
-    };
+        levelGameObject = GameObject.FindGameObjectWithTag("Level");
+        levelPassPanel = FindInHierarchy("Pass");
+        levelFailPanel = FindInHierarchy("Fail");
 
-        // AUTO-FIND COIN UI BY TAG
-        // FIND BY NAME IN CHILDREN OR SCENE
-        GameObject coinObj = GameObject.Find("CoinsTextHUD");
+        tutorialCoinText = FindTextInHierarchy("TutCoin");
+        Debug.Log("Level = " + levelGameObject);
+        Debug.Log("Pass = " + levelPassPanel);
+        Debug.Log("Fail = " + levelFailPanel);
+
+
+        // FIND COUNTDOWN TEXTS — SCENE FULLY READY IN START
+        countdownTexts = new List<TMP_Text>
+        {
+            FindTextInHierarchy("3"),
+            FindTextInHierarchy("2"),
+            FindTextInHierarchy("1"),
+            FindTextInHierarchy("GO")
+        };
+
+        // FIND COIN UI
+        GameObject coinObj = GameObject.Find("CoinTextHUD");
+
         if (coinObj != null)
+        {
             coinText = coinObj.GetComponent<TMP_Text>();
-        passPanelCoinText = FindTextByTag("CoinPass");
-        failPanelCoinText = FindTextByTag("CoinFail");
+        }
+        else
+        {
+            Debug.Log("No CoinsTextHUD found in this scene.");
+        }
 
-        // AUTO-FIND HOME BUTTONS AND ADD LISTENERS
+        passPanelCoinText = FindTextInHierarchy("CoinPass");
+        failPanelCoinText = FindTextInHierarchy("CoinFail");
+
         // HOME BUTTONS
         if (passHomeButton) passHomeButton.onClick.AddListener(HomeButton);
         if (failHomeButton) failHomeButton.onClick.AddListener(HomeButton);
         if (pauseHomeButton) pauseHomeButton.onClick.AddListener(HomeButton);
 
-        // HIDE PANELS
-        if (levelPassPanel) levelPassPanel.SetActive(false);
-        if (levelFailPanel) levelFailPanel.SetActive(false);
-
-        // SHOW LEVEL UI
-        if (levelGameObject) levelGameObject.SetActive(true);
-
-        // RESET SESSION COINS
-        sessionCoins = 0;
         UpdateCoinHUD();
-    }
 
-    // FIND TMP_TEXT BY TAG
-    TMP_Text FindTextByTag(string tag)
-    {
-        GameObject obj = FindObjectByTagIncludingInactive(tag);
-
-        if (obj != null)
-        {
-            // CHECK SELF FIRST, THEN CHILDREN
-            TMP_Text txt = obj.GetComponentInChildren<TMP_Text>(true);
-
-            if (txt != null)
-                return txt;
-        }
-
-        Debug.LogWarning("GameManager: No TMP_Text found with tag '" + tag + "'");
-        return null;
-    }
-    // ADD HOME BUTTON LISTENER BY TAG
-    void AddHomeButtonListener(string tag)
-    {
-        GameObject obj = FindObjectByTagIncludingInactive(tag);
-
-        if (obj != null)
-        {
-            UnityEngine.UI.Button btn = obj.GetComponent<UnityEngine.UI.Button>();
-
-            if (btn != null)
-            {
-                btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(HomeButton);
-            }
-            else
-            {
-                Debug.LogWarning("GameManager: No Button component on tagged object '" + tag + "'");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("GameManager: No GameObject found with tag '" + tag + "'");
-        }
-    }
-    GameObject FindObjectByTagIncludingInactive(string tag)
-    {
-        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
-
-        foreach (GameObject obj in allObjects)
-        {
-            if (obj.CompareTag(tag))
-                return obj;
-        }
-
-        return null;
-    }
-
-    private void Start()
-    {
         StartCoroutine(LevelStartRoutine());
     }
 
@@ -157,6 +108,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         gameStarted = false;
         Pauser.LockPause();
+
         foreach (TMP_Text txt in countdownTexts)
         {
             if (txt) txt.gameObject.SetActive(false);
@@ -182,11 +134,11 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
         gameStarted = true;
+        Pauser.UnlockPause();
     }
 
     // ── COIN TRACKING ──────────────────────────────────────
 
-    // Called by CoinPickUp
     public void AddSessionCoin(int amount)
     {
         sessionCoins += amount;
@@ -197,27 +149,29 @@ public class GameManager : MonoBehaviour
     {
         if (coinText)
             coinText.text = sessionCoins.ToString();
+
+        if (tutorialCoinText)
+            tutorialCoinText.text = sessionCoins.ToString();
     }
+
     // ── GAME STATE ─────────────────────────────────────────
 
     public bool IsGameStarted() => gameStarted;
 
-    // LEVEL PASS — collected coins + 100 bonus
-    // LEVEL PASS — collected coins + 100 bonus
+    // LEVEL PASS
     public void LevelPassed()
     {
         Time.timeScale = 0f;
 
+        // LOCK PAUSE — HIDE PAUSE BUTTON AND BLOCK PAUSE
+        Pauser.LockPause();
+
         // DON'T UNLOCK NEXT LEVEL IN TUTORIAL
         if (SceneManager.GetActiveScene().name != "Tutorial")
         {
-            int currentLevel =
-                PlayerPrefs.GetInt(StringsData.levelToLoad, 1);
-
+            int currentLevel = PlayerPrefs.GetInt(StringsData.levelToLoad, 1);
             int nextLevel = currentLevel + 1;
-
-            int unlockedLevel =
-                PlayerPrefs.GetInt(StringsData.playerLevel, 1);
+            int unlockedLevel = PlayerPrefs.GetInt(StringsData.playerLevel, 1);
 
             if (nextLevel > unlockedLevel)
             {
@@ -225,30 +179,51 @@ public class GameManager : MonoBehaviour
                 PlayerPrefs.Save();
             }
         }
+
         // COINS: collected + win bonus
-        int totalCoins = sessionCoins + winBonusCoins;
+        int totalCoins;
+
+        if (SceneManager.GetActiveScene().name == "Tutorial")
+        {
+            // Tutorial: only collected coins, no bonus
+            totalCoins = sessionCoins;
+        }
+        else
+        {
+            // Normal levels: collected coins + win bonus
+            totalCoins = sessionCoins + winBonusCoins;
+        }
+
         CurrecnyManager.instance.AddCurrency(totalCoins);
 
         if (passPanelCoinText)
             passPanelCoinText.text = "+" + totalCoins;
 
+        if (passPanelCoinText)
+            passPanelCoinText.text = "+" + totalCoins;
+
+        // HIDE LEVEL, SHOW PASS PANEL
         if (levelGameObject) levelGameObject.SetActive(false);
         if (levelPassPanel) levelPassPanel.SetActive(true);
 
         PlayOneShot(levelPassClip);
     }
-    // LEVEL FAIL — only collected coins
+
+    // LEVEL FAIL
     public void LevelFailed()
     {
         Time.timeScale = 0f;
 
-        // COINS: only what was collected, no bonus
+        // LOCK PAUSE — HIDE PAUSE BUTTON AND BLOCK PAUSE
+        Pauser.LockPause();
+
+        // COINS: only collected, no bonus
         CurrecnyManager.instance.AddCurrency(sessionCoins);
 
-        // UPDATE FAIL PANEL TEXT
         if (failPanelCoinText)
             failPanelCoinText.text = "+" + sessionCoins;
 
+        // HIDE LEVEL, SHOW FAIL PANEL
         if (levelGameObject) levelGameObject.SetActive(false);
         if (levelFailPanel) levelFailPanel.SetActive(true);
 
@@ -272,24 +247,85 @@ public class GameManager : MonoBehaviour
 
     public void RestartLevel()
     {
+        Pauser.PauseLocked = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void NextLevel()
     {
+        Pauser.PauseLocked = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void HomeButton()
     {
+        Pauser.PauseLocked = false;
         Time.timeScale = 1f;
 
-        // FLAG: open subs panel on arrival
-        PlayerPrefs.SetInt("ShowSubsPanel", 1);
+        PlayerPrefs.SetInt(StringsData.showSubscriptionPanel, 1);
+        bool comingFromGame =
+    PlayerPrefs.GetInt(StringsData.showSubscriptionPanel, 0) == 1;
         PlayerPrefs.Save();
 
         SceneManager.LoadScene(homeSceneName);
     }
+
+   
+    // SEARCHES ONLY LOADED SCENE CANVASES — NO PREFABS
+    GameObject FindInHierarchy(string tag)
+    {
+        Canvas[] canvases = FindObjectsByType<Canvas>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+
+        foreach (Canvas canvas in canvases)
+        {
+            // SKIP IF NOT IN LOADED SCENE
+            if (!canvas.gameObject.scene.isLoaded) continue;
+
+            Transform[] children =
+                canvas.GetComponentsInChildren<Transform>(true);
+
+            foreach (Transform child in children)
+            {
+                if (child.CompareTag(tag))
+                    return child.gameObject;
+            }
+        }
+
+        return null;
+    }
+
+    // FIND ANY GAMEOBJECT BY TAG IN LOADED SCENE — NOT PREFABS
+    GameObject FindInSceneByTag(string tag)
+    {
+        GameObject[] all = Resources.FindObjectsOfTypeAll<GameObject>();
+
+        foreach (GameObject obj in all)
+        {
+            if (obj.hideFlags == HideFlags.None &&
+                obj.scene.isLoaded &&
+                obj.CompareTag(tag))
+                return obj;
+        }
+
+        Debug.LogWarning("GameManager: No GameObject found with tag '" + tag + "'");
+        return null;
+    }
+    TMP_Text FindTextInHierarchy(string tag)
+    {
+        GameObject obj = FindInHierarchy(tag);
+
+        if (obj != null)
+        {
+            TMP_Text txt = obj.GetComponentInChildren<TMP_Text>(true);
+            if (txt != null) return txt;
+        }
+
+        Debug.LogWarning("GameManager: No TMP_Text found with tag '" + tag + "'");
+        return null;
+    }
+
 }

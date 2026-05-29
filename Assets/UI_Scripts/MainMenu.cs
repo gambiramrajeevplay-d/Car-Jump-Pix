@@ -47,15 +47,21 @@ public class MainMenu : MonoBehaviour
             CurrecnyManager.instance.OnCurrencyChanged += UpdateCoins;
             UpdateCoins(CurrecnyManager.instance.GetCurrency());
         }
-    }
 
+        AudioManagerPause.Initialize();
+        UpdateSoundIcon();
+    }
     private void OnDisable()
     {
         if (CurrecnyManager.instance != null)
         {
             CurrecnyManager.instance.OnCurrencyChanged -= UpdateCoins;
         }
-    }
+       
+    
+        AudioManagerPause.OnAudioStateChanged -= UpdateSoundIcon;
+    
+}
 
     void UpdateCoins(int amount)
     {

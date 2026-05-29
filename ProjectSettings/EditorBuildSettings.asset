@@ -14,4 +14,61 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level_1.unity
     guid: 3cb5e7cb561304c40ae0ce722642cfed
+  - enabled: 1
+    path: Assets/Scenes/Level_2.unity
+    guid: 2ee8d34fe78215145a517bdf2634f3c1
+  - enabled: 1
+    path: Assets/Scenes/Level_3.unity
+    guid: db776f475cceb49488a8103d51ca4c25
+  - enabled: 1
+    path: Assets/Scenes/Level_4.unity
+    guid: a018142e41b488a4da7badfad3e128da
+  - enabled: 1
+    path: Assets/Scenes/Level_5.unity
+    guid: 6757e885309c2674282fc5d81cbf6f2f
+  - enabled: 1
+    path: Assets/Scenes/Level_6.unity
+    guid: 362008c7be71e8042acff53aac574b79
+  - enabled: 1
+    path: Assets/Scenes/Level_7.unity
+    guid: 441f5ad1f74a31649bfe9a4e38f6928f
+  - enabled: 1
+    path: Assets/Scenes/Level_8.unity
+    guid: 4ed97b4de229b374590c9e533f922e50
+  - enabled: 1
+    path: Assets/Scenes/Level_9.unity
+    guid: a3a47273dd020d84c957b461bb98f9c5
+  - enabled: 1
+    path: Assets/Scenes/Level_10.unity
+    guid: 9c8b3949727892d4b90d53fb55f7cd40
+  - enabled: 1
+    path: Assets/Scenes/Level_11.unity
+    guid: 59c90a101f06f9f4ba9d0df1f6e413a7
+  - enabled: 1
+    path: Assets/Scenes/Level_12.unity
+    guid: aebc2fb0b8d598b4fae9d3dd9d2f0559
+  - enabled: 1
+    path: Assets/Scenes/Level_13.unity
+    guid: def5d03148328bd46bd20595edd22a63
+  - enabled: 1
+    path: Assets/Scenes/Level_14.unity
+    guid: a9ebda7911062424988a16b81ddd9a77
+  - enabled: 1
+    path: Assets/Scenes/Level_15.unity
+    guid: f1cb042650c57b645aea35797a9f0af2
+  - enabled: 1
+    path: Assets/Scenes/Level_16.unity
+    guid: d1f989d8ebcfe9144a2621b0c3755803
+  - enabled: 1
+    path: Assets/Scenes/Level_17.unity
+    guid: ae10475506e39f34b8324e195a711109
+  - enabled: 1
+    path: Assets/Scenes/Level_18.unity
+    guid: 7bd3048eef8faac48b68ac048ff776ce
+  - enabled: 1
+    path: Assets/Scenes/Level_19.unity
+    guid: 00496c0c6da0e73488cb6a57f58e1786
+  - enabled: 1
+    path: Assets/Scenes/Level_20.unity
+    guid: b60ef09ebd116184e8cb12609dc28ff8
   m_configObjects: {}

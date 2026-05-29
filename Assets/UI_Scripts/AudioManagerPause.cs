@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class AudioManagerPause : MonoBehaviour
 {
-    private static bool _isMuted = false;
+    private static bool _isMuted;
+
+    public static event Action OnAudioStateChanged;
 
     public static bool IsMuted
     {
-        get { return _isMuted; }
+        get => _isMuted;
         set
         {
             _isMuted = value;
@@ -15,13 +18,14 @@ public class AudioManagerPause : MonoBehaviour
 
             PlayerPrefs.SetInt("AudioMuted", _isMuted ? 1 : 0);
             PlayerPrefs.Save();
+
+            OnAudioStateChanged?.Invoke();
         }
     }
 
     public static void Initialize()
     {
         _isMuted = PlayerPrefs.GetInt("AudioMuted", 0) == 1;
-
         AudioListener.volume = _isMuted ? 0f : 1f;
     }
 }

@@ -31,10 +31,19 @@ public class Pauser : MonoBehaviour
 
     private void OnEnable()
     {
-        PauseButton.SetActive(!AndroidTV.IsAndroidOrFireTv());
-        UpdateSoundIcon(); // 🔥 update icon when opened
-    }
+        AudioManagerPause.Initialize();
 
+        PauseButton.SetActive(!AndroidTV.IsAndroidOrFireTv());
+
+        AudioListener.volume =
+            AudioManagerPause.IsMuted ? 0f : 1f;
+
+        UpdateSoundIcon();
+    }
+    private void OnDisable()
+    {
+        AudioManagerPause.OnAudioStateChanged -= UpdateSoundIcon;
+    }
     void Start()
     {
         // 🔒 ALWAYS LOCK IN TUTORIAL
@@ -57,9 +66,17 @@ public class Pauser : MonoBehaviour
         //    TutorialManager.Instance.IsTutorialOpen())
         //    return;
 
-        if (GameManager.Instance.levelPassPanel.activeSelf ||
-      GameManager.Instance.levelFailPanel.activeSelf)
-            return;
+        if (GameManager.Instance != null)
+        {
+            if ((GameManager.Instance.levelPassPanel != null &&
+                 GameManager.Instance.levelPassPanel.activeSelf) ||
+
+                (GameManager.Instance.levelFailPanel != null &&
+                 GameManager.Instance.levelFailPanel.activeSelf))
+            {
+                return;
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -123,7 +140,6 @@ public class Pauser : MonoBehaviour
             soundIcon.sprite = AudioManagerPause.IsMuted ? sound_off : sound_on;
         }
     }
-
     public static void LockPause()
     {
         PauseLocked = true;
@@ -131,10 +147,11 @@ public class Pauser : MonoBehaviour
         if (instance != null)
         {
             instance.PausePannel.SetActive(false);
-            instance.LevelObject.SetActive(true);
+
+            if (instance.PauseButton != null)
+                instance.PauseButton.SetActive(false);
         }
     }
-
     public static void UnlockPause()
     {
         // ❌ NEVER UNLOCK IN TUTORIAL

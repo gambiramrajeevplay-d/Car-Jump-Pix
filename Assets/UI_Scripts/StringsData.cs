@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StringsData : MonoBehaviour
 {
+    public static string showSubscriptionPanel = "ShowSubscriptionPanel";
     public static string levelToLoad = "LevelToLoad";
     public static string playerCurreny = "PlayerCurrency";
     public static string playerHorseIndex = "PlayerHorseIndex";
