@@ -156,7 +156,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         gameStarted = false;
-
+        Pauser.LockPause();
         foreach (TMP_Text txt in countdownTexts)
         {
             if (txt) txt.gameObject.SetActive(false);
@@ -203,26 +203,32 @@ public class GameManager : MonoBehaviour
     public bool IsGameStarted() => gameStarted;
 
     // LEVEL PASS — collected coins + 100 bonus
+    // LEVEL PASS — collected coins + 100 bonus
     public void LevelPassed()
     {
         Time.timeScale = 0f;
 
-        // UNLOCK NEXT LEVEL
-        int currentBuildIndex = SceneManager.GetActiveScene().buildIndex;
-        int nextLevelIndex = currentBuildIndex + 1;
-        int highestUnlocked = PlayerPrefs.GetInt("UnlockedLevel", 1);
-
-        if (nextLevelIndex > highestUnlocked)
+        // DON'T UNLOCK NEXT LEVEL IN TUTORIAL
+        if (SceneManager.GetActiveScene().name != "Tutorial")
         {
-            PlayerPrefs.SetInt("UnlockedLevel", nextLevelIndex);
-            PlayerPrefs.Save();
-        }
+            int currentLevel =
+                PlayerPrefs.GetInt(StringsData.levelToLoad, 1);
 
+            int nextLevel = currentLevel + 1;
+
+            int unlockedLevel =
+                PlayerPrefs.GetInt(StringsData.playerLevel, 1);
+
+            if (nextLevel > unlockedLevel)
+            {
+                PlayerPrefs.SetInt(StringsData.playerLevel, nextLevel);
+                PlayerPrefs.Save();
+            }
+        }
         // COINS: collected + win bonus
         int totalCoins = sessionCoins + winBonusCoins;
         CurrecnyManager.instance.AddCurrency(totalCoins);
 
-        // UPDATE PASS PANEL TEXT
         if (passPanelCoinText)
             passPanelCoinText.text = "+" + totalCoins;
 
@@ -231,7 +237,6 @@ public class GameManager : MonoBehaviour
 
         PlayOneShot(levelPassClip);
     }
-
     // LEVEL FAIL — only collected coins
     public void LevelFailed()
     {
@@ -280,6 +285,11 @@ public class GameManager : MonoBehaviour
     public void HomeButton()
     {
         Time.timeScale = 1f;
+
+        // FLAG: open subs panel on arrival
+        PlayerPrefs.SetInt("ShowSubsPanel", 1);
+        PlayerPrefs.Save();
+
         SceneManager.LoadScene(homeSceneName);
     }
 }
