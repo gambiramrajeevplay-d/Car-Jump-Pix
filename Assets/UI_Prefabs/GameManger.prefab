@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6314576894517518827
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6314576894517518825}
+  - component: {fileID: 6314576894517518826}
+  m_Layer: 0
+  m_Name: GameManger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6314576894517518825
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6314576894517518827}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 785.8908, y: 380.52008, z: 34.384422}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6314576894517518826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6314576894517518827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a91ff3387586bd34cb62ca83bdbddfe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homeSceneName: UI
+  startPauseDuration: 3
+  countdownTexts: []
+  levelGameObject: {fileID: 0}
+  levelPassPanel: {fileID: 0}
+  levelFailPanel: {fileID: 0}
+  coinText: {fileID: 0}
+  passPanelCoinText: {fileID: 0}
+  failPanelCoinText: {fileID: 0}
+  winBonusCoins: 100
+  passHomeButton: {fileID: 0}
+  failHomeButton: {fileID: 0}
+  pauseHomeButton: {fileID: 0}
+  levelPassClip: {fileID: 8300000, guid: d34ab7c49500b7f469d7d588fbdedfec, type: 3}
+  levelFailClip: {fileID: 8300000, guid: 77a033a32ad73894fa34a64fdf94ed9c, type: 3}

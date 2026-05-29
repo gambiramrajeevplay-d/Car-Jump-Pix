@@ -10,6 +10,13 @@ TagManager:
   - Pass
   - Giveborder
   - border
+  - CoinTextHUD
+  - CoinPass
+  - CoinFail
+  - 3
+  - 2
+  - 1
+  - GO
   layers:
   - Default
   - TransparentFX

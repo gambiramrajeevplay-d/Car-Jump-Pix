@@ -17,6 +17,19 @@ public class CameraFollow : MonoBehaviour
     [Header("Camera Angle")]
     public Vector3 cameraRotation = new Vector3(25f, 0f, 0f);
 
+    private void Start()
+    {
+        // AUTO FIND PLAYER IF NOT ASSIGNED
+        if (target == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+                target = player.transform;
+            else
+                Debug.LogWarning("CameraFollow: No GameObject with tag 'Player' found!");
+        }
+    }
+
     void LateUpdate()
     {
         if (!target)
