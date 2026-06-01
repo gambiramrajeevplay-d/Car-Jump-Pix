@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0.909804, g: 0.7372549, b: 0.7254902, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
@@ -96,7 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: cc03eb8ea0ca1b64d8d588d4be71499c, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -831,7 +831,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -1891,7 +1891,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -2121,6 +2121,10 @@ PrefabInstance:
     - target: {fileID: 6682662099433937196, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
+      propertyPath: jumpheight
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -2353,7 +2357,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -3277,7 +3281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -3610,7 +3614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -4581,7 +4585,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -4814,7 +4818,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -5917,7 +5921,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -9286,7 +9290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -12374,7 +12378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -12557,7 +12561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1585756452
 Transform:
   m_ObjectHideFlags: 0
@@ -15186,7 +15190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: jumpheight
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
@@ -15257,6 +15261,10 @@ PrefabInstance:
     - target: {fileID: 6682662099433937196, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6682662099433937199, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
+      propertyPath: jumpheight
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03ff59df58afc0f4fb72221bd76c7209, type: 3}
