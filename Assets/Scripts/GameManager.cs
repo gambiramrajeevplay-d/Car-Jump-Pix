@@ -51,8 +51,12 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        Instance = this;
+       
+    
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;
+    
+    Instance = this;
         // RESET SESSION COINS
         sessionCoins = 0;
     }

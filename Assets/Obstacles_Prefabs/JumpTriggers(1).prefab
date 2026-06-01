@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpDirection: 0
-  jumpheight: 15
+  jumpheight: 20
   jumpAngle: 35
 --- !u!23 &6682662099433937185
 MeshRenderer:

@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Script;
+
 public class ButtonHighlighter : MonoBehaviour
 {
     private Button previousButton;

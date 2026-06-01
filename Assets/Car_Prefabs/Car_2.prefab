@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f938a12f1982440a7f39cf1399b7e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 35
+  moveSpeed: 25
   reverseSpeed: 30
   acceleration: 7
   rotationSpeed: 110
@@ -405,6 +405,11 @@ MonoBehaviour:
   sidewaysFriction: 2
   steeringSmoothness: 30
   tireGrip: 0.86
+  groundDistance: 0.6
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  gravityScale: 3.5
 --- !u!114 &6474717605960468397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,13 +422,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25f5b7ebfb12e648b884b56e8711e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardForceMultiplier: 8
-  jumpHeight: 15
-  groundDistance: 5
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  extraGravity: 90
+  forwardForceMultiplier: 50
+  jumpHeight: 0
+  forwardBlend: 0.85
   boostCollectedSound: {fileID: 8300000, guid: dee8e0db3eb626340b3f91ccb25e8b07, type: 3}
 --- !u!136 &6474717605960468399
 CapsuleCollider:

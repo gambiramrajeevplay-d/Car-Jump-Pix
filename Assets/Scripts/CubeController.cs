@@ -1,197 +1,256 @@
 using UnityEngine;
-
+using UnityEngine.EventSystems;
+using Script;
 [RequireComponent(typeof(Rigidbody))]
 public class CubeController : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 14f;
     public float reverseSpeed = 7f;
-
-    [Tooltip("How fast speed changes")]
     public float acceleration = 10f;
 
     [Header("Turning")]
     public float rotationSpeed = 170f;
-
-    [Tooltip("Higher = smoother steering")]
     public float turnSmoothness = 7f;
-
-    [Tooltip("Extra turn boost")]
     public float turnMultiplier = 1.3f;
 
     [Header("Stability")]
-    [Tooltip("Higher = less drifting")]
     public float sidewaysFriction = 3f;
-
-    [Tooltip("Smooth steering input")]
     public float steeringSmoothness = 10f;
-
-    private Rigidbody rb;
-
-    private float moveInput;
-    private float turnInput;
-
-    private Vector3 currentVelocity;
-
-    private float currentTurn;
 
     [Header("Grip")]
     [Range(0f, 1f)]
     public float tireGrip = 0.92f;
 
-    // SMOOTH INPUT
-    private float smoothMoveInput;
-    private float smoothTurnInput;
+    [Header("Ground Check")]
+    public float groundDistance = 2.2f;
+    public LayerMask groundLayer;
 
-    void Start()
+    [Header("Jump Arc")]
+    [Tooltip("Multiplies Physics.gravity while airborne. 3-4 = snappy arc, no extra gravity component needed")]
+    public float gravityScale = 3.5f;
+
+    private Rigidbody rb;
+    private float smoothTurnInput;
+    private float currentTurn;
+    private float fixedDelta;
+
+    private const int GROUND_CHECK_INTERVAL = 2;
+    private int groundCheckTimer = 0;
+
+    public bool IsGrounded { get; private set; }
+
+    private bool jumpPending = false;
+    private Vector3 jumpVelocity = Vector3.zero;
+
+    // Suppress Move() for N frames after jump so it doesn't fight the launch velocity
+    private int suppressMoveFrames = 0;
+    private const int JUMP_SUPPRESS_FRAMES = 4;
+
+    private GameObject leftButton;
+    private GameObject rightButton;
+
+    public static float MobileHorizontalInput = 0f;
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
 
         rb.interpolation = RigidbodyInterpolation.Interpolate;
-
         rb.constraints =
-      RigidbodyConstraints.FreezeRotationX |
-      RigidbodyConstraints.FreezeRotationZ;
-
+            RigidbodyConstraints.FreezeRotationX |
+            RigidbodyConstraints.FreezeRotationZ;
         rb.angularDrag = 5f;
-
-        // ADD THIS
         rb.centerOfMass = new Vector3(0f, -0.5f, 0f);
+
+        // Use Unity's built-in gravity scaling via rb — cleaner than AddForce every frame
+        rb.useGravity = false;
+
+        fixedDelta = Time.fixedDeltaTime;
+        leftButton = GameObject.FindGameObjectWithTag("LeftButton");
+        rightButton = GameObject.FindGameObjectWithTag("RightButton");
+
+        bool isTV = AndroidTV.IsAndroidOrFireTv();
+
+        if (leftButton != null)
+            leftButton.SetActive(!isTV);
+
+        if (rightButton != null)
+            rightButton.SetActive(!isTV);
+
+        if (!isTV)
+        {
+            SetupMobileButtons();
+        }
     }
-    void Update()
+
+    private void Update()
     {
-        // AUTO MOVE FORWARD
-        moveInput = 1f;
+        float targetTurn;
 
-        // ONLY STEERING INPUT
-        float targetTurn =
-            Input.GetAxisRaw("Horizontal");
+        if (AndroidTV.IsAndroidOrFireTv())
+        {
+            targetTurn = Input.GetAxisRaw("Horizontal");
+        }
+        else
+        {
+            targetTurn = MobileHorizontalInput;
+        }
 
-        // SMOOTH STEERING
         smoothTurnInput = Mathf.Lerp(
             smoothTurnInput,
             targetTurn,
             steeringSmoothness * Time.deltaTime
         );
+    }
+    private void SetupMobileButtons()
+    {
+        if (leftButton != null)
+        {
+            EventTrigger trigger =
+                leftButton.GetComponent<EventTrigger>();
 
-        turnInput = smoothTurnInput;
+            if (trigger == null)
+                trigger = leftButton.AddComponent<EventTrigger>();
 
-        // OPTIONAL REVERSE
-        //if (Input.GetKey(KeyCode.S))
-        //{
-        //    moveInput = -1f;
-        //}
+            AddTrigger(trigger,
+                EventTriggerType.PointerDown,
+                () => MobileHorizontalInput = -1f);
+
+            AddTrigger(trigger,
+                EventTriggerType.PointerUp,
+                () => MobileHorizontalInput = 0f);
+        }
+
+        if (rightButton != null)
+        {
+            EventTrigger trigger =
+                rightButton.GetComponent<EventTrigger>();
+
+            if (trigger == null)
+                trigger = rightButton.AddComponent<EventTrigger>();
+
+            AddTrigger(trigger,
+                EventTriggerType.PointerDown,
+                () => MobileHorizontalInput = 1f);
+
+            AddTrigger(trigger,
+                EventTriggerType.PointerUp,
+                () => MobileHorizontalInput = 0f);
+        }
     }
 
-    void FixedUpdate()
+    private void AddTrigger(
+        EventTrigger trigger,
+        EventTriggerType type,
+        UnityEngine.Events.UnityAction action)
     {
-        Move();
+        EventTrigger.Entry entry =
+            new EventTrigger.Entry();
+
+        entry.eventID = type;
+
+        entry.callback.AddListener(
+            (data) => action());
+
+        trigger.triggers.Add(entry);
+    }
+    private void FixedUpdate()
+    {
+        // Throttled ground check
+        groundCheckTimer++;
+        if (groundCheckTimer >= GROUND_CHECK_INTERVAL)
+        {
+            groundCheckTimer = 0;
+            IsGrounded = Physics.Raycast(
+                transform.position,
+                Vector3.down,
+                groundDistance,
+                groundLayer
+            );
+        }
+
+        // Always apply scaled gravity ourselves (replaces rb.useGravity)
+        // gravityScale controls arc tightness without any extra AddForce noise
+        rb.AddForce(Physics.gravity * gravityScale, ForceMode.Acceleration);
+
+        if (suppressMoveFrames > 0)
+            suppressMoveFrames--;
+
+        if (jumpPending)
+        {
+            rb.velocity = jumpVelocity;
+            jumpPending = false;
+            // Suppress Move() for a few frames so launch velocity isn't
+            // immediately overwritten by the movement lerp
+            suppressMoveFrames = JUMP_SUPPRESS_FRAMES;
+        }
+        else if (IsGrounded && suppressMoveFrames == 0)
+        {
+            Move();
+            StabilizeVelocity();
+        }
+
         Rotate();
-        StabilizeVelocity();
     }
-    void Move()
+
+    public void RequestJump(Vector3 velocity)
     {
-        float currentSpeed =
-            moveInput < 0 ?
-            reverseSpeed :
-            moveSpeed;
+        jumpVelocity = velocity;
+        jumpPending = true;
+    }
 
-        // FORWARD FORCE
-        Vector3 forwardForce =
-            transform.forward *
-            moveInput *
-            currentSpeed;
+    private void Move()
+    {
+        Vector3 targetVelocity = transform.forward * moveSpeed;
+        float lerpT = acceleration * fixedDelta;
 
-        // PRESERVE CURRENT Y VELOCITY
         Vector3 velocity = rb.velocity;
-
-        // APPLY SMOOTH FORWARD MOVEMENT
-        velocity.x = Mathf.Lerp(
-            velocity.x,
-            forwardForce.x,
-            acceleration * Time.fixedDeltaTime
-        );
-
-        velocity.z = Mathf.Lerp(
-            velocity.z,
-            forwardForce.z,
-            acceleration * Time.fixedDeltaTime
-        );
-
-        rb.velocity = new Vector3(
-            velocity.x,
-            rb.velocity.y,
-            velocity.z
-        );
+        velocity.x = Mathf.Lerp(velocity.x, targetVelocity.x, lerpT);
+        velocity.z = Mathf.Lerp(velocity.z, targetVelocity.z, lerpT);
+        rb.velocity = velocity;
     }
 
-    void Rotate()
+    private void Rotate()
     {
-        // NO TURNING WHEN STOPPED
-        if (Mathf.Abs(moveInput) < 0.05f)
+        if (Mathf.Abs(smoothTurnInput) < 0.01f)
             return;
 
-        // FIX REVERSE STEERING
-        float direction =
-            moveInput > 0 ? 1f : -1f;
+        float turnMultiplierInAir = IsGrounded ? 1f : 0.4f;
+        float speedPercent = Mathf.Clamp01(rb.velocity.magnitude / moveSpeed);
+        float turnStrength = Mathf.Lerp(0.7f, 1f, speedPercent);
 
-        // SPEED BASED TURNING
-        float speedPercent =
-            Mathf.Clamp01(
-                rb.velocity.magnitude / moveSpeed
-            );
-
-        // SMOOTHER TURN CURVE
-        float turnStrength =
-            Mathf.Lerp(0.7f, 1f, speedPercent);
-
-        // TARGET TURN
         float targetTurn =
-            turnInput *
-            direction *
+            smoothTurnInput *
             rotationSpeed *
             turnMultiplier *
-            turnStrength;
+            turnStrength *
+            turnMultiplierInAir;
 
-        // SMOOTH TURNING
-        currentTurn = Mathf.Lerp(
-            currentTurn,
-            targetTurn,
-            turnSmoothness * Time.fixedDeltaTime
-        );
+        currentTurn = Mathf.Lerp(currentTurn, targetTurn, turnSmoothness * fixedDelta);
 
-        Quaternion turnRotation =
-            Quaternion.Euler(
-                0f,
-                currentTurn * Time.fixedDeltaTime,
-                0f
-            );
-
-        // SMOOTH ROTATION
         rb.MoveRotation(
-            Quaternion.Lerp(
-                rb.rotation,
-                rb.rotation * turnRotation,
-                0.9f
-            )
+            rb.rotation * Quaternion.Euler(0f, currentTurn * fixedDelta, 0f)
         );
-
-        // REMOVE SHAKE
-        Vector3 angVel = rb.angularVelocity;
-        angVel.x = 0f;
-        angVel.z = 0f;
-        rb.angularVelocity = angVel;
     }
-    void StabilizeVelocity()
+
+    private void StabilizeVelocity()
     {
-        Vector3 localVelocity =
-            transform.InverseTransformDirection(rb.velocity);
+        Vector3 right = transform.right;
+        float sidewaysSpeed = Vector3.Dot(rb.velocity, right);
 
-        // REDUCE SIDEWAYS SLIDE
-        localVelocity.x *= tireGrip;
-
-        rb.velocity =
-            transform.TransformDirection(localVelocity);
+        Vector3 velocity = rb.velocity;
+        velocity -= right * (sidewaysSpeed * (1f - tireGrip));
+        rb.velocity = velocity;
     }
 
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(
+            transform.position,
+            transform.position + Vector3.down * groundDistance
+        );
+    }
+#endif
 }

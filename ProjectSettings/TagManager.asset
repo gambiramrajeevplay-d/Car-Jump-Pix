@@ -18,6 +18,8 @@ TagManager:
   - 1
   - GO
   - TutCoin
+  - LeftButton
+  - RightButton
   layers:
   - Default
   - TransparentFX
