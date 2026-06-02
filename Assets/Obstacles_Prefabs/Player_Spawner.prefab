@@ -54,11 +54,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   truckPrefabs:
+  - {fileID: 9012632157898763540, guid: b5bb57b570cb2fd4b9d7532e2ecd4e27, type: 3}
   - {fileID: 1475570171208358723, guid: efee5177d4cd2dd4bbf72b035ed8f298, type: 3}
   - {fileID: 6474717605960468388, guid: 5a095088435a69346a2832fb56764c39, type: 3}
   - {fileID: 147775671790828534, guid: a7bfffa35eb19ba4ab753b58bef2ddde, type: 3}
   - {fileID: 3638172563733155710, guid: e1e416c107d051b4dab02b4eaa66059a, type: 3}
   - {fileID: 671244749892110052, guid: cc9d657c2ee5bec4ea18e36b204f94da, type: 3}
   - {fileID: 8354027157012815640, guid: 20aa7a5bc5eb89a408748650408245db, type: 3}
-  - {fileID: 9012632157898763540, guid: b5bb57b570cb2fd4b9d7532e2ecd4e27, type: 3}
   - {fileID: 8817252532196552254, guid: cafa4f736d57eec40ab010e2c602f9e0, type: 3}
