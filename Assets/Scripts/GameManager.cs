@@ -43,6 +43,19 @@ public class GameManager : MonoBehaviour
     private bool gameStarted = false;
     private int sessionCoins = 0;
     [SerializeField] private TMP_Text tutorialCoinText;
+
+    [Header("Countdown Audio")]
+    public AudioClip threeClip;
+    public AudioClip twoClip;
+    public AudioClip oneClip;
+    public AudioClip goClip;
+
+    private AudioSource countdownAudioSource;
+
+    [Header("Countdown Cameras")]
+    private Camera mainCamera;
+    private Camera cutSceneCamera;
+
     private void Awake()
     {
         // SINGLETON
@@ -63,6 +76,23 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // FIND CAMERAS
+        GameObject mainCamObj = GameObject.FindGameObjectWithTag("MainCamera");
+        if (mainCamObj)
+            mainCamera = mainCamObj.GetComponent<Camera>();
+
+        GameObject cutCamObj = GameObject.FindGameObjectWithTag("Cut");
+        if (cutCamObj)
+            cutSceneCamera = cutCamObj.GetComponent<Camera>();
+
+        // CREATE AUDIO SOURCE
+        countdownAudioSource = gameObject.GetComponent<AudioSource>();
+
+        if (countdownAudioSource == null)
+            countdownAudioSource = gameObject.AddComponent<AudioSource>();
+
+        countdownAudioSource.playOnAwake = false;
+
         levelGameObject = GameObject.FindGameObjectWithTag("Level");
         levelPassPanel = FindInHierarchy("Pass");
         levelFailPanel = FindInHierarchy("Fail");
@@ -113,34 +143,85 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         Pauser.LockPause();
 
+        // MAIN CAMERA OFF DURING COUNTDOWN
+        if (mainCamera != null)
+            mainCamera.gameObject.SetActive(false);
+
+        // CUTSCENE CAMERA ON
+        if (cutSceneCamera != null)
+            cutSceneCamera.gameObject.SetActive(true);
+
         foreach (TMP_Text txt in countdownTexts)
         {
-            if (txt) txt.gameObject.SetActive(false);
+            if (txt)
+                txt.gameObject.SetActive(false);
         }
 
-        int seconds = Mathf.CeilToInt(startPauseDuration);
-
-        for (int i = 0; i < seconds && i < countdownTexts.Count; i++)
+        // 3
+        if (countdownTexts.Count > 0 && countdownTexts[0] != null)
         {
-            countdownTexts[i].gameObject.SetActive(true);
+            countdownTexts[0].gameObject.SetActive(true);
+
+            if (threeClip)
+                countdownAudioSource.PlayOneShot(threeClip);
+
             yield return new WaitForSecondsRealtime(1f);
-            countdownTexts[i].gameObject.SetActive(false);
+
+            countdownTexts[0].gameObject.SetActive(false);
         }
 
-        int goIndex = seconds;
-
-        if (goIndex < countdownTexts.Count)
+        // 2
+        if (countdownTexts.Count > 1 && countdownTexts[1] != null)
         {
-            countdownTexts[goIndex].gameObject.SetActive(true);
-            yield return new WaitForSecondsRealtime(0.5f);
-            countdownTexts[goIndex].gameObject.SetActive(false);
+            countdownTexts[1].gameObject.SetActive(true);
+
+            if (twoClip)
+                countdownAudioSource.PlayOneShot(twoClip);
+
+            yield return new WaitForSecondsRealtime(1f);
+
+            countdownTexts[1].gameObject.SetActive(false);
         }
+
+        // 1
+        if (countdownTexts.Count > 2 && countdownTexts[2] != null)
+        {
+            countdownTexts[2].gameObject.SetActive(true);
+
+            if (oneClip)
+                countdownAudioSource.PlayOneShot(oneClip);
+
+            yield return new WaitForSecondsRealtime(1f);
+
+            countdownTexts[2].gameObject.SetActive(false);
+        }
+
+        // GO
+        if (countdownTexts.Count > 3 && countdownTexts[3] != null)
+        {
+            countdownTexts[3].gameObject.SetActive(true);
+
+            if (goClip)
+                countdownAudioSource.PlayOneShot(goClip);
+
+            yield return new WaitForSecondsRealtime(1f);
+
+            countdownTexts[3].gameObject.SetActive(false);
+        }
+
+        // COUNTDOWN FINISHED
+        // CUT CAMERA OFF
+        if (cutSceneCamera != null)
+            cutSceneCamera.gameObject.SetActive(false);
+
+        // MAIN CAMERA ON
+        if (mainCamera != null)
+            mainCamera.gameObject.SetActive(true);
 
         Time.timeScale = 1f;
         gameStarted = true;
         Pauser.UnlockPause();
     }
-
     // ── COIN TRACKING ──────────────────────────────────────
 
     public void AddSessionCoin(int amount)

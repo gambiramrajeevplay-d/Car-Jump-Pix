@@ -59,3 +59,8 @@ MonoBehaviour:
   pauseHomeButton: {fileID: 0}
   levelPassClip: {fileID: 8300000, guid: d34ab7c49500b7f469d7d588fbdedfec, type: 3}
   levelFailClip: {fileID: 8300000, guid: 77a033a32ad73894fa34a64fdf94ed9c, type: 3}
+  tutorialCoinText: {fileID: 0}
+  threeClip: {fileID: 8300000, guid: 70d4e56af5c568446b3798d0ba0def9c, type: 3}
+  twoClip: {fileID: 8300000, guid: 34319e40d0c72ff468b8b1caddee5dac, type: 3}
+  oneClip: {fileID: 8300000, guid: 0a9daba3409bc864b83d8ee5efe49913, type: 3}
+  goClip: {fileID: 8300000, guid: df63dae3f63a82046bd365eaee2c262d, type: 3}

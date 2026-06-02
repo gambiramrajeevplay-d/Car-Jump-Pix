@@ -20,6 +20,7 @@ TagManager:
   - TutCoin
   - LeftButton
   - RightButton
+  - Cut
   layers:
   - Default
   - TransparentFX
