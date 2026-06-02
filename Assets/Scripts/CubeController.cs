@@ -104,7 +104,7 @@ public class CubeController : MonoBehaviour
         else
         {
             targetTurn = MobileHorizontalInput;
-         
+
         }
 
         smoothTurnInput = Mathf.Lerp(
