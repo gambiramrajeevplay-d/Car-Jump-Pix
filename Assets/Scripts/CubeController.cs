@@ -50,6 +50,16 @@ public class CubeController : MonoBehaviour
     private GameObject leftButton;
     private GameObject rightButton;
 
+    [Header("Skid Marks")]
+    public TrailRenderer leftSkid;
+    public TrailRenderer rightSkid;
+
+    [Tooltip("How much turning is required before skids appear")]
+    public float skidTurnThreshold = 0.6f;
+
+    [Tooltip("Minimum speed required for skids")]
+    public float skidSpeedThreshold = 5f;
+
     public static float MobileHorizontalInput = 0f;
     private void Start()
     {
@@ -192,6 +202,7 @@ public class CubeController : MonoBehaviour
         }
 
         Rotate();
+        UpdateSkidMarks();
     }
 
     public void RequestJump(Vector3 velocity)
@@ -243,7 +254,19 @@ public class CubeController : MonoBehaviour
         velocity -= right * (sidewaysSpeed * (1f - tireGrip));
         rb.velocity = velocity;
     }
+    private void UpdateSkidMarks()
+    {
+        if (leftSkid == null || rightSkid == null)
+            return;
 
+        bool shouldSkid =
+            IsGrounded &&
+            Mathf.Abs(smoothTurnInput) > skidTurnThreshold &&
+            rb.velocity.magnitude > skidSpeedThreshold;
+
+        leftSkid.emitting = shouldSkid;
+        rightSkid.emitting = shouldSkid;
+    }
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {

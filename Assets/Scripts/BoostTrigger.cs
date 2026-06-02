@@ -32,6 +32,8 @@ public class BoostTrigger : MonoBehaviour
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 0f;
         audioSource.clip = boostCollectedSound;
+        audioSource.priority = 120;
+        audioSource.volume = 1f;
     }
 
     private void FixedUpdate()
